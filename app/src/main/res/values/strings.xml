@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">GetLocation</string>
     <string name="title_activity_map_location">Map</string>
+    <string name="lblLatitude">Latitude</string>
+    <string name="btnLocalizar">Localizar</string>
+    <string name="lblLongitude">Longitude</string>
 </resources>

@@ -7,6 +7,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,6 +23,8 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 public class MapLocation extends FragmentActivity implements OnMapReadyCallback, FusedLocationListener.LocationListener {
 
     private GoogleMap mMap;
+    EditText txtLongitude, txtLatitude;
+    private Button btnDisplay;
     //private FusedLocationProviderApi fusedLocationProviderApi;
     private FusedLocationListener locationService;
 
@@ -36,7 +41,13 @@ public class MapLocation extends FragmentActivity implements OnMapReadyCallback,
 
         checkFineLocationPermission();
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        txtLatitude = (EditText) findViewById(R.id.txtLatitude);
+        txtLongitude = (EditText) findViewById(R.id.txtLongitude);
+        btnDisplay = (Button) findViewById(R.id.btnLocalizar);
+
+
+        addListenerOnButton();
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -104,6 +115,11 @@ public class MapLocation extends FragmentActivity implements OnMapReadyCallback,
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,8));
 
+
+        txtLatitude.setText(String.valueOf(location.getLatitude()));
+        txtLongitude.setText(String.valueOf(location.getLongitude()));
+
+
         Log.d("I", "Curent position defined");
 
     }
@@ -115,6 +131,30 @@ public class MapLocation extends FragmentActivity implements OnMapReadyCallback,
 
     @Override
     public void onConnectionFailed(String msg) {
+
+    }
+
+    public void addListenerOnButton() {
+
+
+        btnDisplay.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+
+                String latitude= txtLatitude.getText().toString();
+                String longitude = txtLongitude.getText().toString();
+
+                LatLng userLocation = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
+                mMap.addMarker(new MarkerOptions().position(userLocation).title("Current location"));
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,8));
+
+                Log.d("I", "New position");
+            }
+
+        });
 
     }
 
